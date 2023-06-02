@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front;
+use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ShopController;
 
@@ -18,4 +19,16 @@ use App\Http\Controllers\Front\ShopController;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('shop/product/{id}', [ShopController::class, 'show']);
+Route::prefix('shop')->group(function(){
+    Route::get('/product/{id}', [ShopController::class, 'show']);
+    Route::post('/product/{id}', [ShopController::class, 'postComment']);
+    Route::get('/', [ShopController::class, 'index']);
+    Route::post('/', [ShopController::class, 'index']);
+    Route::get('/{categoryName}', [ShopController::class, 'category']);
+    
+});
+
+Route::prefix('cart')->group(function(){
+    Route::get('add/{id}', [CartController::class, 'add']);
+});
+

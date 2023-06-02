@@ -250,12 +250,15 @@
                                                     </td>
                                                     <td>
                                                         <div class="pd-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-0"></i>
-                                                            <span>(5)</span>
+                                                            @for ($i = 0; $i < 5; $i++)
+                                                                @if ($i < $avgRating)
+                                                                    <i class="fa fa-star"></i>
+                                                                @else
+                                                                    <i class="fa fa-star-o"></i>
+                                                                @endif                                                              
+                                                            @endfor
+                                                           
+                                                            <span>({{count($product->productComments)}})</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -263,7 +266,7 @@
                                                     <td class="p-catagory">Price</td>
                                                     <td>
                                                         <div class="p-price">
-                                                            $495.00
+                                                            ${{$product->price}}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -276,32 +279,40 @@
                                                 <tr>
                                                     <td class="p-catagory">Availability</td>
                                                     <td>
-                                                        <div class="p-stock">22 in stock</div>
+                                                        <div class="p-stock">{{$product->qty}} in stock</div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="p-catagory">Weight</td>
                                                     <td>
-                                                        <div class="p-weight">1,3kg</div>
+                                                        <div class="p-weight">{{$product->weight}}kg</div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="p-catagory">Size</td>
                                                     <td>
-                                                        <div class="p-size">XXL</div>
+                                                        
+                                                        <div class="p-size">
+                                                            @foreach (array_unique(array_column($product->productDetails->toArray(), 'size')) as $productSize)
+                                                                {{$productSize}}
+                                                            @endforeach
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="p-catagory">Color</td>
                                                     <td>
-                                                        <span class="cs-color"></span>
+                                                        @foreach (array_unique(array_column($product->productDetails->toArray(), 'color')) as $productColor)
+                                                            <span class="cs-{{$productColor}}"></span>
+                                                        @endforeach
+                                  
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="p-catagory">Sku</td>
                                                     <td>
                                                         <div class="p-code">
-                                                            0012
+                                                            {{$product->sku}}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -311,61 +322,62 @@
                                     </div>
                                     <div class="tab-pane fade" id="tab-3" role="tabpanel">
                                        <div class="customer-review-option">
-                                        <h4>2 Comments</h4>
+                                        <h4>{{count($product->productComments)}} Comments</h4>
                                         <div class="comment-option">
-                                            <div class="co-item">
-                                                <div class="avatar-pic">
-                                                    <img src="front/img/product-single/avatar-1.png" alt="">
-                                                </div>
-                                                <div class="avatar-text">
-                                                    <div class="at-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-0"></i>
+                                            @foreach ($product->productComments as $productComment)
+                                                <div class="co-item">
+                                                    <div class="avatar-pic">
+                                                        <img src="front/img/product-single/{{$productComment->user->avatar ?? 'default.jpg'}}" alt="">
                                                     </div>
-                                                    <h5>Brandon Kelley <span>27 Aug 2022</span></h5>
-                                                    <div class="at-reply">Nice !</div>
-                                                </div>
-                                            </div>
-                                            <div class="co-item">
-                                                <div class="avatar-pic">
-                                                    <img src="front/img/product-single/avatar-1.png" alt="">
-                                                </div>
-                                                <div class="avatar-text">
-                                                    <div class="at-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-0"></i>
+                                                    <div class="avatar-text">
+                                                        <div class="at-rating">
+                                                            @for ($i = 0; $i < 5; $i++)
+                                                                @if ($i < $avgRating)
+                                                                    <i class="fa fa-star"></i>
+                                                                @else
+                                                                    <i class="fa fa-star-o"></i>
+                                                                @endif                                                              
+                                                            @endfor
+                                                        </div>
+                                                        <h5>{{$productComment->name}}<span>{{date('M d,Y', strtotime($productComment->create_at))}}/span></h5>
+                                                        <div class="at-reply">Nice !</div>
                                                     </div>
-                                                    <h5>Brandon Kelley <span>27 Aug 2022</span></h5>
-                                                    <div class="at-reply">Nice !</div>
                                                 </div>
-                                            </div>
+                                            @endforeach
+                                           
                                         </div>
-                                        <div class="personal-rating">
-                                            <h6>Your Rating</h6>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-0"></i>
-                                        </div>
+                                      
                                         <div class="leave-comment">
                                             <h4>Leave A Comment</h4>
-                                            <form action="" class="comment-form">
+                                            <form action="" method="POST" class="comment-form">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{$product->id}}">
+                                                <input type="hidden" name="user_id" value="{{\Illuminate\Support\Facades\Auth::user()->id ?? null}}">
+
                                                 <div class="row">
                                                     <div class="col-lg-6">
-                                                        <input type="text" placeholder="Name" name="" id="">
+                                                        <input type="text" placeholder="Name" name="name" id="">
                                                     </div>
                                                     <div class="col-lg-6">
-                                                        <input type="text" placeholder="Email" name="" id="">
+                                                        <input type="text" placeholder="Email" name="email" id="">
                                                     </div>
                                                     <div class="col-lg-12">
-                                                        <textarea placeholder="Message"></textarea>
+                                                        <textarea placeholder="Messages" name="messages"></textarea>
+                                                        <div class="personal-rating">
+                                                            <h6>Your Rating</h6>
+                                                            <div class="rate">
+                                                                <input type="radio" id="star5" name="rating" value="5" />
+                                                                <label for="star5" title="text">5 stars</label>
+                                                                <input type="radio" id="star4" name="rating" value="4" />
+                                                                <label for="star4" title="text">4 stars</label>
+                                                                <input type="radio" id="star3" name="rating" value="3" />
+                                                                <label for="star3" title="text">3 stars</label>
+                                                                <input type="radio" id="star2" name="rating" value="2" />
+                                                                <label for="star2" title="text">2 stars</label>
+                                                                <input type="radio" id="star1" name="rating" value="1" />
+                                                                <label for="star1" title="text">1 star</label>
+                                                            </div>
+                                                        </div>
                                                         <button type="submit" class="site-btn">Send Message</button>
                                                     </div>
                                                 </div>
@@ -383,7 +395,7 @@
                
             </div>
         </section>
-        <!-- Product shop section end -->
+        <!-- Product shop section end -->   
     
         <!-- Related Products Section Begin -->
         <div class="related-products spad" >
@@ -391,115 +403,17 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-title">
-                            <h2>Eelated Products</h2>
+                            <h2>Related Products</h2>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="product-item">
-                            <div class="pi-pic">
-                                <img src="front/img/products/product-1.jpg" alt="">
-                                <div class="sale pp-sale">Sale</div>
-                                <div class="icon">
-                                    <i class="icon_heart_alt"></i>
-                                </div>
-                                <ul>
-                                    <li class="w-icon active"><a href=""><i class="icon_bag_alt"></i></a></li>
-                                    <li class="quick-view"><a href="product.html">+ Quick View</a></li>
-                                    <li class="w-icon"><a href=""><i class="fa fa-random"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="pi-text">
-                                <div class="catagory-name">Towel</div>
-                                <a href="">
-                                    <h5>Pure Pineapple</h5>
-                                </a>
-                                <div class="product-price">
-                                    $14.00
-                                    <span>$35.00</span>
-                                </div>
-                            </div>
+                   
+                    @foreach ($relatedProducts as $relatedProduct)
+                        <div class="col-lg-3 col-sm-6">
+                            @include('front.components.product-item', ['product' => $relatedProduct])
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="product-item">
-                            <div class="pi-pic">
-                                <img src="front/img/products/product-1.jpg" alt="">
-                                <div class="sale pp-sale">Sale</div>
-                                <div class="icon">
-                                    <i class="icon_heart_alt"></i>
-                                </div>
-                                <ul>
-                                    <li class="w-icon active"><a href=""><i class="icon_bag_alt"></i></a></li>
-                                    <li class="quick-view"><a href="product.html">+ Quick View</a></li>
-                                    <li class="w-icon"><a href=""><i class="fa fa-random"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="pi-text">
-                                <div class="catagory-name">Towel</div>
-                                <a href="">
-                                    <h5>Pure Pineapple</h5>
-                                </a>
-                                <div class="product-price">
-                                    $14.00
-                                    <span>$35.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="product-item">
-                            <div class="pi-pic">
-                                <img src="front/img/products/product-1.jpg" alt="">
-                                <div class="sale pp-sale">Sale</div>
-                                <div class="icon">
-                                    <i class="icon_heart_alt"></i>
-                                </div>
-                                <ul>
-                                    <li class="w-icon active"><a href=""><i class="icon_bag_alt"></i></a></li>
-                                    <li class="quick-view"><a href="product.html">+ Quick View</a></li>
-                                    <li class="w-icon"><a href=""><i class="fa fa-random"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="pi-text">
-                                <div class="catagory-name">Towel</div>
-                                <a href="">
-                                    <h5>Pure Pineapple</h5>
-                                </a>
-                                <div class="product-price">
-                                    $14.00
-                                    <span>$35.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="product-item">
-                            <div class="pi-pic">
-                                <img src="front/img/products/product-1.jpg" alt="">
-                                <div class="sale pp-sale">Sale</div>
-                                <div class="icon">
-                                    <i class="icon_heart_alt"></i>
-                                </div>
-                                <ul>
-                                    <li class="w-icon active"><a href=""><i class="icon_bag_alt"></i></a></li>
-                                    <li class="quick-view"><a href="product.html">+ Quick View</a></li>
-                                    <li class="w-icon"><a href=""><i class="fa fa-random"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="pi-text">
-                                <div class="catagory-name">Towel</div>
-                                <a href="">
-                                    <h5>Pure Pineapple</h5>
-                                </a>
-                                <div class="product-price">
-                                    $14.00
-                                    <span>$35.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

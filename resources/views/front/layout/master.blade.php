@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
+    
     <link rel="stylesheet" href="front/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="front/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="front/css/themify-icons.css" type="text/css">
@@ -75,8 +76,10 @@
                                     All Cartegories
                                 </button>
                                 <div class="input-group">
-                                    <input type="text" placeholder="What do you need?" name="" id="">
-                                    <button type="button"><i class="ti-search"></i></button>
+                                    <form action="shop">
+                                        <input name="search" type="text" value="{{request()->search}}" placeholder="What do you need?" >
+                                        <button type="submit"><i class="ti-search"></i></button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -163,17 +166,17 @@
                     </div>
                     <div class="nav-menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="index.html">Home</a></li>
-                            <li><a href="shop.html">Shop</a></li>
-                            <li><a href="">Collection</a>
+                            <li class="{{(request()->segment(1)=='') ? 'active' : ''}}"><a href="/">Home</a></li>
+                            <li class="{{(request()->segment(1)=='shop') ? 'active' : ''}}"><a href="shop">Shop</a></li>
+                            <li ><a href="">Collection</a>
                                 <ul class="dropdown">
                                     <li><a href="">Men's</a></li>
                                     <li><a href="">Women's</a></li>
                                     <li><a href="">Kid's</a></li>
                                 </ul>
                             </li>
-                            <li><a href="">Blog</a></li>
-                            <li><a href="">Contact</a></li>
+                            <li class="{{(request()->segment(1)=='blog') ? 'active' : ''}}"><a href="blog">Blog</a></li>
+                            <li class="{{(request()->segment(1)=='contact') ? 'active' : ''}}"><a href="contact">Contact</a></li>
                             <li><a href="">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="blog-details.html">Blog Detail</a></li>
